@@ -1,0 +1,11 @@
+name = "TerminatorsTests"
+uuid = "baadddeb-8572-40dc-aab6-c94c27e0cc9a"
+authors = ["Takafumi Arakaki <aka.tkf@gmail.com> and contributors"]
+version = "0.0.1"
+
+[deps]
+Terminators = "b0858c3f-a9bf-4cba-a0e3-6aaeea5477ac"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+julia = "1"

@@ -18,7 +18,7 @@ function test_timeout()
         using Terminators
         Terminators.withtimeout(0.1) do
             while true
-                GC.safepoint()
+                $(VERSION ≥ v"1.4" ? "GC.safepoint()" : "yield()")
             end
         end
         """)

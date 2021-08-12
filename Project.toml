@@ -1,7 +1,7 @@
 name = "Terminators"
 uuid = "b0858c3f-a9bf-4cba-a0e3-6aaeea5477ac"
 authors = ["Takafumi Arakaki <aka.tkf@gmail.com> and contributors"]
-version = "0.0.1"
+version = "0.1.0"
 
 [compat]
 julia = "1"

@@ -3,14 +3,15 @@ function terminator_loop(output::IO, input::IO, ppid::Int)
     timers = Dict{UInt,Timer}()
     for ln in eachline(input)
         @debug "[$mypid] GOT: $ln"
-        sop, sid, stime = split(ln; limit = 3)
+        sop, sid, stime, label = split(ln; limit = 4, keepempty = true)
         id = parse(UInt, sid)
         time = parse(Float64, stime)
         print(output, "ack $sid\n")
         flush(output)
         if sop == "start"
             timer = Timer(time) do _
-                @error "[$mypid] Timeout ($time) terminating process $ppid"
+                msglabel = label == "" ? "" : " for $label;"
+                @error "[$mypid] Timeout ($time)$msglabel terminating process $ppid"
                 isactive() = isdir("/proc/$ppid")
                 function signalling(sig, n = typemax(Int))
                     @info "[$mypid] Trying to terminate process $ppid with $sig"

@@ -67,11 +67,15 @@ function wait_ack(p::Terminator, id::UInt)
     @assert ln == "ack $id"
 end
 
-function Terminators.start(timeout::Number, p::AbstractTerminator = global_terminator())
+function Terminators.start(
+    timeout::Number,
+    p::AbstractTerminator = global_terminator();
+    label = "",
+)
     p isa NullTerminator && return UInt(0)
     timeout = Float64(timeout)
     id = TIMER_ID[] += 1
-    write(p.proc, "start $id $timeout\n")
+    write(p.proc, "start $id $timeout $label\n")
     flush(p.proc)
     wait_ack(p, id)
     return id
@@ -79,14 +83,19 @@ end
 
 function Terminators.stop(id::UInt, p::AbstractTerminator = global_terminator())
     p isa NullTerminator && return UInt(0)
-    write(p.proc, "stop $id 0\n")
+    write(p.proc, "stop $id 0 \n")
     flush(p.proc)
     wait_ack(p, id)
     return id
 end
 
-function Terminators.withtimeout(f, timeout::Number, p::AbstractTerminator = global_terminator())
-    id = Terminators.start(timeout, p)
+function Terminators.withtimeout(
+    f,
+    timeout::Number,
+    p::AbstractTerminator = global_terminator();
+    kwargs...,
+)
+    id = Terminators.start(timeout, p; kwargs...)
     try
         return f()
     finally
